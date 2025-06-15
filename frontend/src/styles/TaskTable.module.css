@@ -7,17 +7,32 @@
 
 .form {
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  align-items: flex-end
 }
 
 .form input {
   flex: 1;
   padding: 0.5rem;
+  width: 100%;
 }
 
 button {
   padding: 0.5rem 1rem;
+}
+
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end
+}
+
+.tableContainer input {
+  flex: 1;
+  padding: 0.5rem;
 }
 
 .table {

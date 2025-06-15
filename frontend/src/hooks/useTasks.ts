@@ -1,22 +1,34 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Task } from "../types/task";
+import { useDebounce } from "./useDebounce";
 
 const API_URL = "http://localhost:3000/api/v1/tasks";
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetching, setFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [search, setSearch] = useState("");
 
-  const resetAppStates = () => {
+  const debouncedSearch = useDebounce(search, 500);
+
+  const resetAppStates = (clearSearch = true) => {
+    if (clearSearch) {
+      setSearch("");
+    } else {
+      setLoading(true);
+    }
     setError(null);
-    setLoading(true);
+    setFetching(true);
   };
 
   const fetchTasks = useCallback(async () => {
     try {
-      resetAppStates();
-      const res = await fetch(API_URL);
+      resetAppStates(false);
+      const res = await fetch(`${API_URL}?search=${debouncedSearch}`);
       const data = await res.json();
       setTasks(data);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -24,8 +36,9 @@ export function useTasks() {
       setError("Failed to fetch tasks");
     } finally {
       setLoading(false);
+      setFetching(false);
     }
-  }, []);
+  }, [debouncedSearch]);
 
   const createTask = async (
     task: Omit<Task, "id" | "createdAt" | "updatedAt">
@@ -54,7 +67,7 @@ export function useTasks() {
       setError("Failed to create task");
       setTasks((prev) => prev.filter((t) => t.id !== optimisticTask.id));
     } finally {
-      setLoading(false);
+      setFetching(false);
     }
   };
 
@@ -76,8 +89,7 @@ export function useTasks() {
       setError("Failed to update task");
       setTasks(prev);
     } finally {
-      setLoading(false);
-    }
+      setFetching(false);    }
   };
 
   const deleteTask = async (id: number) => {
@@ -91,7 +103,14 @@ export function useTasks() {
       setError("Failed to delete task");
       setTasks(prev);
     } finally {
-      setLoading(false);
+      setFetching(false);    }
+  };
+
+  const handleCreate = () => {
+    if (title.trim()) {
+      createTask({ title, description, completed: false });
+      setTitle("");
+      setDescription("");
     }
   };
 
@@ -99,5 +118,19 @@ export function useTasks() {
     fetchTasks();
   }, [fetchTasks]);
 
-  return { tasks, loading, error, createTask, updateTask, deleteTask };
+  return {
+    tasks,
+    loading,
+    error,
+    updateTask,
+    deleteTask,
+    title,
+    setTitle,
+    description,
+    setDescription,
+    search,
+    setSearch,
+    handleCreate,
+    fetching,
+  };
 }
