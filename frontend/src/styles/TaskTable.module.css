@@ -22,7 +22,6 @@
 .form input {
   flex: 1;
   padding: 0.5rem;
-  
   font-size: 1rem;
 }
 
@@ -71,7 +70,13 @@ button {
 
 .table {
   width: 100%;
+  min-width: 600px;
   border-collapse: collapse;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  width: 100%;
 }
 
 .table th,
@@ -101,7 +106,7 @@ button {
   font-weight: bold;
 }
 
-.sr-only {
+.srOnly {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -110,4 +115,36 @@ button {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+@media (max-width: 768px) {
+  .container h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .form button {
+    width: 100%;
+  }
+
+  .searchBar {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .checkboxLabel {
+    width: fit-content;
+    display: block;
+  }
+
+  .clearButton {
+    width: 100%;
+  }
+
+  .table th,
+  .table td {
+    font-size: 0.9rem;
+    padding: 0.4rem;
+  }
 }

@@ -79,7 +79,7 @@ export function TaskTable() {
             </label>
             <div className={styles.formGroup}>
               <label htmlFor="search-input" className={styles.label}>
-                <span className="sr-only">Search tasks</span>
+                <span className="srOnly">Search tasks</span>
               </label>
               <input
                 id="search-input"
@@ -100,27 +100,29 @@ export function TaskTable() {
               Clear
             </button>
           </div>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Completed</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tasks.map((task) => (
-                <TaskRow
-                  key={task.id}
-                  task={task}
-                  onToggle={(id, completed) => updateTask(id, { completed })}
-                  onDelete={deleteTask}
-                  disabled={fetching}
-                />
-              ))}
-            </tbody>
-          </table>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Completed</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tasks.map((task) => (
+                  <TaskRow
+                    key={task.id}
+                    task={task}
+                    onToggle={(id, completed) => updateTask(id, { completed })}
+                    onDelete={deleteTask}
+                    disabled={fetching}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
           {totalPages > 1 && (
             <div className={styles.pagination}>
               <button
