@@ -16,6 +16,9 @@ export function TaskTable() {
     setSearch,
     handleCreate,
     fetching,
+    page,
+    setPage,
+    totalPages,
   } = useTasks();
 
   return (
@@ -43,12 +46,24 @@ export function TaskTable() {
         <p>Loading...</p>
       ) : (
         <div className={styles.tableContainer}>
-          <input
-            placeholder="Search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            disabled={fetching}
-          />
+          <div className={styles.searchBar}>
+            <input
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              disabled={fetching}
+            />
+            <button
+              onClick={() => {
+                setSearch("");
+                setPage(1);
+              }}
+              disabled={fetching || search === ""}
+              className={styles.clearButton}
+            >
+              Clear
+            </button>
+          </div>
           <table className={styles.table}>
             <thead>
               <tr>
@@ -85,6 +100,32 @@ export function TaskTable() {
               ))}
             </tbody>
           </table>
+          {totalPages > 1 && (
+            <div className={styles.pagination}>
+              <button
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1 || fetching}
+              >
+                Prev
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
+                  disabled={p === page || fetching}
+                  className={p === page ? styles.activePage : ""}
+                >
+                  {p}
+                </button>
+              ))}
+              <button
+                onClick={() => setPage(page + 1)}
+                disabled={page === totalPages || fetching}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -12,98 +12,77 @@ export function useTasks() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [search, setSearch] = useState("");
-
+  const [page, setPage] = useState(1);
+  const [limit] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
+  
   const debouncedSearch = useDebounce(search, 500);
-
-  const resetAppStates = (clearSearch = true) => {
-    if (clearSearch) {
-      setSearch("");
-    } else {
-      setLoading(true);
-    }
-    setError(null);
-    setFetching(true);
-  };
 
   const fetchTasks = useCallback(async () => {
     try {
-      resetAppStates(false);
-      const res = await fetch(`${API_URL}?search=${debouncedSearch}`);
-      const data = await res.json();
-      setTasks(data);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      setFetching(true);
+      const params = new URLSearchParams({
+        search: debouncedSearch,
+        page: String(page),
+        limit: String(limit),
+      });
+
+      const res = await fetch(`${API_URL}?${params.toString()}`);
+      const json = await res.json();
+
+      setTasks(json.data);
+      setTotalPages(json.totalPages);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setError("Failed to fetch tasks");
     } finally {
       setLoading(false);
       setFetching(false);
     }
-  }, [debouncedSearch]);
+  }, [debouncedSearch, page, limit]);
 
-  const createTask = async (
-    task: Omit<Task, "id" | "createdAt" | "updatedAt">
-  ) => {
-    const optimisticTask = {
-      ...task,
-      id: Date.now(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    setTasks((prev) => [optimisticTask, ...prev]);
-
+  const createTask = async (task: Omit<Task, "id" | "createdAt" | "updatedAt">) => {
     try {
-      resetAppStates();
-      const res = await fetch(API_URL, {
+      setFetching(true);
+      await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(task),
       });
-      const newTask = await res.json();
-      setTasks((prev) => [
-        newTask,
-        ...prev.filter((t) => t.id !== optimisticTask.id),
-      ]);
+      await fetchTasks();
     } catch {
       setError("Failed to create task");
-      setTasks((prev) => prev.filter((t) => t.id !== optimisticTask.id));
     } finally {
       setFetching(false);
     }
   };
 
   const updateTask = async (id: number, updates: Partial<Task>) => {
-    const prev = [...tasks];
-    const optimistic = tasks.map((t) =>
-      t.id === id ? { ...t, ...updates } : t
-    );
-    setTasks(optimistic);
-
     try {
-      resetAppStates();
+      setFetching(true);
       await fetch(`${API_URL}/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
       });
+      await fetchTasks();
     } catch {
       setError("Failed to update task");
-      setTasks(prev);
     } finally {
-      setFetching(false);    }
+      setFetching(false);
+    }
   };
 
   const deleteTask = async (id: number) => {
-    const prev = [...tasks];
-    setTasks(tasks.filter((t) => t.id !== id));
-
     try {
-      resetAppStates();
+      setFetching(true);
       await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      await fetchTasks();
     } catch {
       setError("Failed to delete task");
-      setTasks(prev);
     } finally {
-      setFetching(false);    }
+      setFetching(false);
+    }
   };
 
   const handleCreate = () => {
@@ -122,15 +101,18 @@ export function useTasks() {
     tasks,
     loading,
     error,
+    fetching,
     updateTask,
     deleteTask,
+    handleCreate,
     title,
     setTitle,
     description,
     setDescription,
     search,
     setSearch,
-    handleCreate,
-    fetching,
+    page,
+    setPage,
+    totalPages,
   };
 }
