@@ -1,5 +1,6 @@
 import { useTasks } from "../hooks/useTasks";
 import styles from "../styles/TaskTable.module.css";
+import { TaskRow } from "./TaskRow";
 
 export function TaskTable() {
   const {
@@ -89,28 +90,13 @@ export function TaskTable() {
             </thead>
             <tbody>
               {tasks.map((task) => (
-                <tr key={task.id}>
-                  <td className={styles.dataCentered}>{task.title}</td>
-                  <td className={styles.dataCentered}>{task.description}</td>
-                  <td className={styles.dataCentered}>
-                    <input
-                      type="checkbox"
-                      checked={task.completed}
-                      onChange={() =>
-                        updateTask(task.id, { completed: !task.completed })
-                      }
-                      disabled={fetching}
-                    />
-                  </td>
-                  <td className={styles.dataCentered}>
-                    <button
-                      onClick={() => deleteTask(task.id)}
-                      disabled={fetching}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
+                <TaskRow
+                  key={task.id}
+                  task={task}
+                  onToggle={(id, completed) => updateTask(id, { completed })}
+                  onDelete={deleteTask}
+                  disabled={fetching}
+                />
               ))}
             </tbody>
           </table>
