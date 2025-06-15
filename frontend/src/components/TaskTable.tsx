@@ -22,6 +22,7 @@ export function TaskTable() {
     totalPages,
     onlyIncomplete,
     setOnlyIncomplete,
+    titleRef,
   } = useTasks();
 
   return (
@@ -29,18 +30,31 @@ export function TaskTable() {
       <h1>Task manager</h1>
       {error && <p className={styles.error}>{error}</p>}
       <div className={styles.form}>
-        <input
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          disabled={fetching}
-        />
-        <input
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          disabled={fetching}
-        />
+        <div className={styles.formGroup}>
+          <label htmlFor="task-title" className={styles.label}>
+            Title
+          </label>
+          <input
+            id="task-title"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            disabled={fetching}
+            ref={titleRef}
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label htmlFor="task-desc" className={styles.label}>
+            Description
+          </label>
+          <input
+            id="task-desc"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            disabled={fetching}
+          />
+        </div>
         <button onClick={handleCreate} disabled={fetching}>
           Add task
         </button>
@@ -50,8 +64,9 @@ export function TaskTable() {
       ) : (
         <div className={styles.tableContainer}>
           <div className={styles.searchBar}>
-            <label className={styles.checkboxLabel}>
+            <label htmlFor="incomplete-only" className={styles.checkboxLabel}>
               <input
+                id="incomplete-only"
                 type="checkbox"
                 checked={onlyIncomplete}
                 onChange={(e) => {
@@ -60,14 +75,20 @@ export function TaskTable() {
                 }}
                 disabled={fetching}
               />
-              Show incomplete only
+              Only show incomplete
             </label>
-            <input
-              placeholder="Search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              disabled={fetching}
-            />
+            <div className={styles.formGroup}>
+              <label htmlFor="search-input" className={styles.label}>
+                <span className="sr-only">Search tasks</span>
+              </label>
+              <input
+                id="search-input"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                disabled={fetching}
+              />
+            </div>
             <button
               onClick={() => {
                 setSearch("");

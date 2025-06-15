@@ -13,11 +13,22 @@
   align-items: flex-end
 }
 
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .form input {
   flex: 1;
   padding: 0.5rem;
-  width: 100%;
+  
   font-size: 1rem;
+}
+
+.label {
+  align-self: flex-start;
+  font-weight: 500;
 }
 
 button {
@@ -26,7 +37,8 @@ button {
 
 .searchBar {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  jusify-content: space-between;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
@@ -36,6 +48,7 @@ button {
   align-items: center;
   gap: 0.5rem;
   margin-right: 1rem;
+  width: 100%;
 }
 
 .searchBar input {
@@ -86,4 +99,15 @@ button {
   background-color: #333;
   color: white;
   font-weight: bold;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

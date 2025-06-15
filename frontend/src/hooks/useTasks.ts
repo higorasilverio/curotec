@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Task } from "../types/task";
 import { useDebounce } from "./useDebounce";
 
@@ -18,6 +18,8 @@ export function useTasks() {
   const [totalPages, setTotalPages] = useState(1);
 
   const debouncedSearch = useDebounce(search, 500);
+
+  const titleRef = useRef<HTMLInputElement | null>(null);
 
   const fetchTasks = useCallback(async () => {
     try {
@@ -94,6 +96,7 @@ export function useTasks() {
       createTask({ title, description, completed: false });
       setTitle("");
       setDescription("");
+      titleRef.current?.focus();
     }
   };
 
@@ -120,5 +123,6 @@ export function useTasks() {
     totalPages,
     onlyIncomplete,
     setOnlyIncomplete,
+    titleRef,
   };
 }

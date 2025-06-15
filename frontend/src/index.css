@@ -55,6 +55,12 @@ button:disabled {
   border-color: transparent;
 }
 
+input:focus-visible,
+button:focus-visible {
+  outline: 3px solid #333;
+  outline-offset: 2px;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
