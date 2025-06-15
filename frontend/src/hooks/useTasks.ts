@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { Task } from "../types/task";
 import { useDebounce } from "./useDebounce";
 
-const API_URL = "http://localhost:3000/api/v1/tasks";
+const API_URL = `${import.meta.env.VITE_API_URL}/tasks`;
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
