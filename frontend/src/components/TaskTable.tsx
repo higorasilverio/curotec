@@ -1,28 +1,41 @@
-import { useState } from 'react';
-import { useTasks } from '../hooks/useTasks';
-import styles from '../styles/TaskTable.module.css';
+import { useState } from "react";
+import { useTasks } from "../hooks/useTasks";
+import styles from "../styles/TaskTable.module.css";
 
 export function TaskTable() {
-  const { tasks, loading, error, createTask, updateTask, deleteTask } = useTasks();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const { tasks, loading, error, createTask, updateTask, deleteTask } =
+    useTasks();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleCreate = () => {
     if (title.trim()) {
       createTask({ title, description, completed: false });
-      setTitle('');
-      setDescription('');
+      setTitle("");
+      setDescription("");
     }
   };
 
   return (
     <div className={styles.container}>
-      <h1>Task Manager</h1>
+      <h1>Task manager</h1>
       {error && <p className={styles.error}>{error}</p>}
       <div className={styles.form}>
-        <input placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
-        <input placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} />
-        <button onClick={handleCreate}>Add Task</button>
+        <input
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          disabled={loading}
+        />
+        <input
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          disabled={loading}
+        />
+        <button onClick={handleCreate} disabled={loading}>
+          Add task
+        </button>
       </div>
       {loading ? (
         <p>Loading...</p>
@@ -37,19 +50,27 @@ export function TaskTable() {
             </tr>
           </thead>
           <tbody>
-            {tasks.map(task => (
+            {tasks.map((task) => (
               <tr key={task.id}>
-                <td>{task.title}</td>
-                <td>{task.description}</td>
-                <td>
+                <td className={styles.dataCentered}>{task.title}</td>
+                <td className={styles.dataCentered}>{task.description}</td>
+                <td className={styles.dataCentered}>
                   <input
                     type="checkbox"
                     checked={task.completed}
-                    onChange={() => updateTask(task.id, { completed: !task.completed })}
+                    onChange={() =>
+                      updateTask(task.id, { completed: !task.completed })
+                    }
+                    disabled={loading}
                   />
                 </td>
-                <td>
-                  <button onClick={() => deleteTask(task.id)}>Delete</button>
+                <td className={styles.dataCentered}>
+                  <button
+                    onClick={() => deleteTask(task.id)}
+                    disabled={loading}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

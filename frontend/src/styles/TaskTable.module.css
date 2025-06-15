@@ -31,6 +31,10 @@ button {
   border: 1px solid #ccc;
 }
 
+.dataCentered {
+  text-align: center;
+}
+
 .error {
   color: red;
 }
