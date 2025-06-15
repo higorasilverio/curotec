@@ -19,6 +19,8 @@ export function TaskTable() {
     page,
     setPage,
     totalPages,
+    onlyIncomplete,
+    setOnlyIncomplete,
   } = useTasks();
 
   return (
@@ -47,6 +49,18 @@ export function TaskTable() {
       ) : (
         <div className={styles.tableContainer}>
           <div className={styles.searchBar}>
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                checked={onlyIncomplete}
+                onChange={(e) => {
+                  setOnlyIncomplete(e.target.checked);
+                  setPage(1);
+                }}
+                disabled={fetching}
+              />
+              Show incomplete only
+            </label>
             <input
               placeholder="Search"
               value={search}

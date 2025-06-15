@@ -12,10 +12,11 @@ export function useTasks() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [search, setSearch] = useState("");
+  const [onlyIncomplete, setOnlyIncomplete] = useState(false);
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
-  
+
   const debouncedSearch = useDebounce(search, 500);
 
   const fetchTasks = useCallback(async () => {
@@ -25,6 +26,7 @@ export function useTasks() {
         search: debouncedSearch,
         page: String(page),
         limit: String(limit),
+        onlyIncomplete: String(onlyIncomplete),
       });
 
       const res = await fetch(`${API_URL}?${params.toString()}`);
@@ -32,16 +34,18 @@ export function useTasks() {
 
       setTasks(json.data);
       setTotalPages(json.totalPages);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setError("Failed to fetch tasks");
     } finally {
       setLoading(false);
       setFetching(false);
     }
-  }, [debouncedSearch, page, limit]);
+  }, [debouncedSearch, page, limit, onlyIncomplete]);
 
-  const createTask = async (task: Omit<Task, "id" | "createdAt" | "updatedAt">) => {
+  const createTask = async (
+    task: Omit<Task, "id" | "createdAt" | "updatedAt">
+  ) => {
     try {
       setFetching(true);
       await fetch(API_URL, {
@@ -114,5 +118,7 @@ export function useTasks() {
     page,
     setPage,
     totalPages,
+    onlyIncomplete,
+    setOnlyIncomplete,
   };
 }
