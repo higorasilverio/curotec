@@ -20,29 +20,26 @@ export const getFilteredTasks = async ({
   search,
   page,
   limit,
+  onlyIncomplete,
 }: {
   search: string;
   page: number;
   limit: number;
+  onlyIncomplete: boolean;
 }) => {
-  const where: Prisma.TaskWhereInput = search
-    ? {
-        OR: [
-          {
-            title: {
-              contains: search,
-              mode: Prisma.QueryMode.insensitive,
-            },
-          },
-          {
-            description: {
-              contains: search,
-              mode: Prisma.QueryMode.insensitive,
-            },
-          },
-        ],
-      }
-    : {};
+  const where: Prisma.TaskWhereInput = {
+    ...(search && {
+      OR: [
+        { title: { contains: search, mode: Prisma.QueryMode.insensitive } },
+        {
+          description: { contains: search, mode: Prisma.QueryMode.insensitive },
+        },
+      ],
+    }),
+    ...(onlyIncomplete && {
+      completed: false,
+    }),
+  };
 
   const [tasks, total] = await Promise.all([
     prisma.task.findMany({

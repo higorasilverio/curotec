@@ -7,7 +7,9 @@ export const getAllTasks = async (
   next: NextFunction
 ) => {
   try {
-    const { search = "", page = "1", limit = "5" } = req.query;
+    const { search = "", page = "1", limit = "5", onlyIncomplete = "false" } =
+      req.query;
+    const incompleteOnly = onlyIncomplete === "true";
 
     const currentPage = parseInt(page as string, 10);
     const pageSize = parseInt(limit as string, 10);
@@ -16,6 +18,7 @@ export const getAllTasks = async (
       search: search as string,
       page: currentPage,
       limit: pageSize,
+      onlyIncomplete: incompleteOnly,
     });
 
     res.json({
