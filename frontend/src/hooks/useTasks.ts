@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Task } from "../types/task";
 import { useDebounce } from "./useDebounce";
+import { toast } from "react-toastify";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/tasks`;
 
@@ -8,7 +9,6 @@ export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetching, setFetching] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [search, setSearch] = useState("");
@@ -38,7 +38,7 @@ export function useTasks() {
       setTotalPages(json.totalPages);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      setError("Failed to fetch tasks");
+      toast.error("Failed to fetch tasks");
     } finally {
       setLoading(false);
       setFetching(false);
@@ -55,9 +55,10 @@ export function useTasks() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(task),
       });
+      toast.success("Task created");
       await fetchTasks();
     } catch {
-      setError("Failed to create task");
+      toast.error("Failed to create tasks");
     } finally {
       setFetching(false);
     }
@@ -71,9 +72,10 @@ export function useTasks() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
       });
+      toast.success("Task updated");
       await fetchTasks();
     } catch {
-      setError("Failed to update task");
+      toast.error("Failed to update task");
     } finally {
       setFetching(false);
     }
@@ -83,9 +85,10 @@ export function useTasks() {
     try {
       setFetching(true);
       await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      toast.success("Task deleted");
       await fetchTasks();
     } catch {
-      setError("Failed to delete task");
+      toast.error("Failed to delete task");
     } finally {
       setFetching(false);
     }
@@ -107,7 +110,6 @@ export function useTasks() {
   return {
     tasks,
     loading,
-    error,
     fetching,
     updateTask,
     deleteTask,
