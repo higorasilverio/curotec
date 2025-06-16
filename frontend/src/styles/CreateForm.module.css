@@ -1,0 +1,39 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: flex-end;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form input {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.label {
+  align-self: flex-start;
+  font-weight: 500;
+}
+
+button {
+  padding: 0.5rem 1rem;
+}
+
+.error {
+  color: #e94638;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .form button {
+    width: 100%;
+  }
+}

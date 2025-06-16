@@ -5,55 +5,8 @@
   font-family: sans-serif;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  align-items: flex-end;
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.form input {
-  flex: 1;
-  padding: 0.5rem;
-  font-size: 1rem;
-}
-
-.label {
-  align-self: flex-start;
-  font-weight: 500;
-}
-
 button {
   padding: 0.5rem 1rem;
-}
-
-.searchBar {
-  display: flex;
-  align-items: flex-end;
-  jusify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.checkboxLabel {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-right: 1rem;
-  width: 100%;
-}
-
-.searchBar input {
-  flex: 1;
-  padding: 0.5rem;
-  font-size: 1rem;
 }
 
 .tableContainer {
@@ -83,70 +36,10 @@ button {
 .table td {
   padding: 0.5rem;
   border: 1px solid #ccc;
-}
-
-.dataCentered {
-  text-align: center;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  gap: 0.5rem;
-}
-
-.activePage {
-  background-color: #333;
-  color: #fff;
-  font-weight: bold;
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  max-width: 250px;
   white-space: nowrap;
-  border: 0;
-}
-
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modalContent {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.modalContent h2 {
-  margin-top: 0;
-}
-
-.modalContent button {
-  margin-top: 1rem;
-  width: 100%;
-}
-
-.error {
-  color: #e94638;
-  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media (max-width: 768px) {
@@ -155,40 +48,9 @@ button {
     text-align: center;
   }
 
-  .form button {
-    width: 100%;
-  }
-
-  .searchBar {
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-  }
-
-  .checkboxLabel {
-    width: fit-content;
-    display: block;
-  }
-
-  .clearButton {
-    width: 100%;
-  }
-
   .table th,
-  .table td {
-    font-size: 0.9rem;
-    padding: 0.4rem;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .modalContent {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
+.table td {
+  font-size: 0.9rem;
+  padding: 0.4rem;
+}
 }

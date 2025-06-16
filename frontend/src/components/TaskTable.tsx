@@ -1,5 +1,9 @@
 import { useTasks } from "../hooks/useTasks";
 import styles from "../styles/TaskTable.module.css";
+import CreateForm from "./CreateForm";
+import Filters from "./Filters";
+import Modal from "./Modal";
+import Pagination from "./Pagination";
 import { TaskRow } from "./TaskRow";
 
 export function TaskTable() {
@@ -33,78 +37,28 @@ export function TaskTable() {
   return (
     <div className={styles.container}>
       <h1>Task manager</h1>
-      <div className={styles.form}>
-        {formError && <p className={styles.error}>{formError}</p>}
-        <div className={styles.formGroup}>
-          <label htmlFor="task-title" className={styles.label}>
-            Title
-          </label>
-          <input
-            id="task-title"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            disabled={fetching}
-            ref={titleRef}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="task-desc" className={styles.label}>
-            Description
-          </label>
-          <input
-            id="task-desc"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            disabled={fetching}
-          />
-        </div>
-        <button onClick={handleCreate} disabled={fetching}>
-          Add task
-        </button>
-      </div>
+      <CreateForm
+        title={title}
+        setTitle={setTitle}
+        description={description}
+        setDescription={setDescription}
+        formError={formError}
+        fetching={fetching}
+        handleCreate={handleCreate}
+        titleRef={titleRef}
+      />
       {loading ? (
         <p>Loading...</p>
       ) : (
         <div className={styles.tableContainer}>
-          <div className={styles.searchBar}>
-            <label htmlFor="incomplete-only" className={styles.checkboxLabel}>
-              <input
-                id="incomplete-only"
-                type="checkbox"
-                checked={onlyIncomplete}
-                onChange={(e) => {
-                  setOnlyIncomplete(e.target.checked);
-                  setPage(1);
-                }}
-                disabled={fetching}
-              />
-              Only show incomplete
-            </label>
-            <div className={styles.formGroup}>
-              <label htmlFor="search-input" className={styles.label}>
-                <span className="srOnly">Search tasks</span>
-              </label>
-              <input
-                id="search-input"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                disabled={fetching}
-              />
-            </div>
-            <button
-              onClick={() => {
-                setSearch("");
-                setPage(1);
-              }}
-              disabled={fetching || search === ""}
-              className={styles.clearButton}
-            >
-              Clear
-            </button>
-          </div>
+          <Filters
+            onlyIncomplete={onlyIncomplete}
+            setOnlyIncomplete={setOnlyIncomplete}
+            search={search}
+            setSearch={setSearch}
+            setPage={setPage}
+            fetching={fetching}
+          />
           <div className={styles.tableWrapper}>
             <table className={styles.table}>
               <thead>
@@ -130,59 +84,22 @@ export function TaskTable() {
             </table>
           </div>
           {totalPages > 1 && (
-            <div className={styles.pagination}>
-              <button
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1 || fetching}
-              >
-                Prev
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setPage(p)}
-                  disabled={p === page || fetching}
-                  className={p === page ? styles.activePage : ""}
-                >
-                  {p}
-                </button>
-              ))}
-              <button
-                onClick={() => setPage(page + 1)}
-                disabled={page === totalPages || fetching}
-              >
-                Next
-              </button>
-            </div>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              setPage={setPage}
+              fetching={fetching}
+            />
           )}
         </div>
       )}
       {selectedTaskId !== null && (
-        <div
-          className={styles.modalOverlay}
-          onClick={() => setSelectedTaskId(null)}
-        >
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {loadingDetails ? (
-              <p>Loading...</p>
-            ) : detailsError ? (
-              <p className={styles.error}>{detailsError}</p>
-            ) : taskDetails ? (
-              <>
-                <h2>{taskDetails.title}</h2>
-                <p>{taskDetails.description || "No description"}</p>
-                <p>
-                  <strong>Completed:</strong>{" "}
-                  {taskDetails.completed ? "Yes" : "No"}
-                </p>
-                <button onClick={() => setSelectedTaskId(null)}>Close</button>
-              </>
-            ) : null}
-          </div>
-        </div>
+        <Modal
+          setSelectedTaskId={setSelectedTaskId}
+          loadingDetails={loadingDetails}
+          detailsError={detailsError}
+          taskDetails={taskDetails}
+        />
       )}
     </div>
   );
