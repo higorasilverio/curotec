@@ -98,7 +98,7 @@ button {
 
 .activePage {
   background-color: #333;
-  color: white;
+  color: #fff;
   font-weight: bold;
 }
 
@@ -141,6 +141,11 @@ button {
 
 .modalContent button {
   margin-top: 1rem;
+  width: 100%;
+}
+
+.error {
+  color: #e94638;
   width: 100%;
 }
 

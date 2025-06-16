@@ -20,6 +20,7 @@ export function useTasks() {
   const [taskDetails, setTaskDetails] = useState<Task | null>(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [detailsError, setDetailsError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const debouncedSearch = useDebounce(search, 500);
 
@@ -28,22 +29,24 @@ export function useTasks() {
   useEffect(() => {
     const fetchTaskDetails = async () => {
       if (selectedTaskId === null) return;
-  
+
       setLoadingDetails(true);
       setDetailsError(null);
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/tasks/${selectedTaskId}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/tasks/${selectedTaskId}`
+        );
         if (!res.ok) throw new Error("Task not found");
         const data = await res.json();
         setTaskDetails(data);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         setDetailsError("Failed to load task details.");
       } finally {
         setLoadingDetails(false);
       }
     };
-  
+
     fetchTaskDetails();
   }, [selectedTaskId]);
 
@@ -121,12 +124,26 @@ export function useTasks() {
   };
 
   const handleCreate = () => {
-    if (title.trim()) {
-      createTask({ title, description, completed: false });
-      setTitle("");
-      setDescription("");
-      titleRef.current?.focus();
+    if (!title.trim()) {
+      setFormError("Title is required.");
+      return;
     }
+
+    if (title.length > 100) {
+      setFormError("Title must be under 100 characters.");
+      return;
+    }
+
+    if (description.length > 300) {
+      setFormError("Description must be under 300 characters.");
+      return;
+    }
+
+    setFormError(null);
+    createTask({ title, description, completed: false });
+    setTitle("");
+    setDescription("");
+    titleRef.current?.focus();
   };
 
   useEffect(() => {
@@ -157,5 +174,6 @@ export function useTasks() {
     loadingDetails,
     detailsError,
     taskDetails,
+    formError,
   };
 }

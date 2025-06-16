@@ -27,12 +27,14 @@ export function TaskTable() {
     loadingDetails,
     detailsError,
     taskDetails,
+    formError,
   } = useTasks();
 
   return (
     <div className={styles.container}>
       <h1>Task manager</h1>
       <div className={styles.form}>
+      {formError && <p className={styles.error}>{formError}</p>}
         <div className={styles.formGroup}>
           <label htmlFor="task-title" className={styles.label}>
             Title
