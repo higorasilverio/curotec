@@ -1,8 +1,7 @@
 # Task Manager App (Fullstack CRUD)
 
-A fullstack task management application built with **React (Vite)** on the frontend and **Express (TypeScript)** on the backend. It supports full CRUD operations, user authentication, filtering, pagination, and is fully documented with Swagger and tested with Vitest and Jest.
-
----
+A fullstack task management application built with **React (Vite)** on the frontend and **Express (TypeScript)** on the backend.  
+It supports full CRUD operations, user authentication, filtering, pagination, and is fully documented with Swagger and tested with Vitest and Jest.
 
 ## 🔧 Tech Stack
 
@@ -19,8 +18,6 @@ A fullstack task management application built with **React (Vite)** on the front
 - **Swagger** for REST API documentation
 - **Helmet + CORS + Rate Limiting** for security
 - **Jest** for backend unit and integration tests
-
----
 
 ## 📦 Features
 
@@ -43,8 +40,6 @@ A fullstack task management application built with **React (Vite)** on the front
 - Available at: `/api-docs`
 - Powered by Swagger UI and OpenAPI schema
 
----
-
 ## 🏁 Getting Started
 
 ### 1. Clone and Install
@@ -63,13 +58,13 @@ npm start
 
 **Environment Variables (backend):**
 ```
-DATABASE_URL="postgresql://user:password@host:port/dbname"
-JWT_SECRET=dev-secret
-PORT=3000
-RATE_LIMIT_TIME=15
-RATE_LIMIT_REQUESTS=100
-ENABLE_TRANSPORT_SECURITY=true
-WEB_APPLICATION_DOMAIN_URL=http://localhost:5173
+DATABASE_URL=
+JWT_SECRET=
+PORT=
+RATE_LIMIT_TIME=
+RATE_LIMIT_REQUESTS=
+ENABLE_TRANSPORT_SECURITY=
+WEB_APPLICATION_DOMAIN_URL=
 ```
 
 ### 3. Frontend Setup
@@ -81,11 +76,9 @@ npm start
 
 **Environment Variables (frontend):**
 ```
-VITE_API_TASK_URL=http://localhost:3000/api/v1
-VITE_API_AUTH_URL=http://localhost:3000/api
+VITE_API_TASK_URL=
+VITE_API_AUTH_URL=
 ```
-
----
 
 ## 🧪 Running Tests
 
@@ -101,32 +94,35 @@ cd frontend
 npm test
 ```
 
----
-
 ## 🧰 Folder Structure Highlights
 
 ### Backend
 ```
 /backend
-├── controllers/
-├── services/
-├── routes/
-├── middlewares/
-├── config/ (Swagger & rate limiter)
-├── lib/ (Prisma client)
+├── prisma/
+├───── migrations/
+├── src/
+├──── __mocks__/
+├──── controllers/
+├──── services/
+├──── routes/
+├──── middlewares/
+├──── config/ (Swagger & rate limiter)
+├──── lib/ (Prisma client)
 ```
 
 ### Frontend
 ```
 /frontend
-├── components/
-├── hooks/
-├── styles/
-├── types/
-├── __tests__/
+├── src/
+├──── components/
+├────── __tests__/
+├──── hooks/
+├──── styles/
+├──── types/
+├──── test/
+├──── lib/
 ```
-
----
 
 ## 🔐 Security
 
@@ -136,15 +132,11 @@ npm test
 - **JWT**: Access control and session management
 - **Error Handling**: Centralized and user-friendly
 
----
-
 ## 🚀 Deployment Tips
 
 - Use **Amazon Aurora Serverless v2** or PostgreSQL in production
 - Setup **HTTPS** and secure cookie handling
 - Leverage **CI/CD** pipelines for test coverage enforcement
-
----
 
 ## 🙌 Acknowledgments
 
@@ -153,8 +145,6 @@ Built as part of a technical assessment, with a focus on:
 - Testing discipline
 - Security best practices
 - RESTful design and OpenAPI documentation
-
----
 
 ## 📄 License
 
