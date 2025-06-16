@@ -1,0 +1,22 @@
+.app {
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+.logout {
+  padding: 0.5rem 1rem;
+  background-color: #1a1a1a;
+  color: white;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.logout:hover {
+  border-color: #333;
+}

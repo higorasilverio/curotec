@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Task } from "../types/task";
 import { useDebounce } from "./useDebounce";
 import { toast } from "react-toastify";
+import { useAuth } from "./useAuth";
 
-const API_URL = `${import.meta.env.VITE_API_URL}/tasks`;
+const API_URL = `${import.meta.env.VITE_API_TASK_URL}/tasks`;
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -26,6 +27,8 @@ export function useTasks() {
 
   const titleRef = useRef<HTMLInputElement | null>(null);
 
+  const { token } = useAuth();
+
   useEffect(() => {
     const fetchTaskDetails = async () => {
       if (selectedTaskId === null) return;
@@ -34,7 +37,10 @@ export function useTasks() {
       setDetailsError(null);
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/tasks/${selectedTaskId}`
+          `${import.meta.env.VITE_API_URL}/tasks/${selectedTaskId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
         if (!res.ok) throw new Error("Task not found");
         const data = await res.json();
@@ -48,7 +54,7 @@ export function useTasks() {
     };
 
     fetchTaskDetails();
-  }, [selectedTaskId]);
+  }, [selectedTaskId, token]);
 
   const fetchTasks = useCallback(async () => {
     try {
@@ -60,7 +66,9 @@ export function useTasks() {
         onlyIncomplete: String(onlyIncomplete),
       });
 
-      const res = await fetch(`${API_URL}?${params.toString()}`);
+      const res = await fetch(`${API_URL}?${params.toString()}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const json = await res.json();
 
       setTasks(json.data);
@@ -72,7 +80,7 @@ export function useTasks() {
       setLoading(false);
       setFetching(false);
     }
-  }, [debouncedSearch, page, limit, onlyIncomplete]);
+  }, [debouncedSearch, page, limit, onlyIncomplete, token]);
 
   const createTask = async (
     task: Omit<Task, "id" | "createdAt" | "updatedAt">
@@ -81,7 +89,10 @@ export function useTasks() {
       setFetching(true);
       await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(task),
       });
       toast.success("Task created");
@@ -113,7 +124,10 @@ export function useTasks() {
   const deleteTask = async (id: number) => {
     try {
       setFetching(true);
-      await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       toast.success("Task deleted");
       await fetchTasks();
     } catch {
