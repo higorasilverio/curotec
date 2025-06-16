@@ -37,7 +37,7 @@ export function useTasks() {
       setDetailsError(null);
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/tasks/${selectedTaskId}`,
+          `${import.meta.env.VITE_API_TASK_URL}/tasks/${selectedTaskId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -48,6 +48,7 @@ export function useTasks() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         setDetailsError("Failed to load task details.");
+        setSelectedTaskId(null);
       } finally {
         setLoadingDetails(false);
       }
@@ -109,7 +110,10 @@ export function useTasks() {
       setFetching(true);
       await fetch(`${API_URL}/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(updates),
       });
       toast.success("Task updated");
