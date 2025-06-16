@@ -1,6 +1,5 @@
-import { PrismaClient, Task, Prisma } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { Task, Prisma } from "@prisma/client";
+import { prisma } from '../lib/prisma';
 
 export const getAllTasks = () => prisma.task.findMany();
 
