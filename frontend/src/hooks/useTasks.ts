@@ -16,10 +16,36 @@ export function useTasks() {
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+  const [taskDetails, setTaskDetails] = useState<Task | null>(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
+  const [detailsError, setDetailsError] = useState<string | null>(null);
 
   const debouncedSearch = useDebounce(search, 500);
 
   const titleRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    const fetchTaskDetails = async () => {
+      if (selectedTaskId === null) return;
+  
+      setLoadingDetails(true);
+      setDetailsError(null);
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/tasks/${selectedTaskId}`);
+        if (!res.ok) throw new Error("Task not found");
+        const data = await res.json();
+        setTaskDetails(data);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (err) {
+        setDetailsError("Failed to load task details.");
+      } finally {
+        setLoadingDetails(false);
+      }
+    };
+  
+    fetchTaskDetails();
+  }, [selectedTaskId]);
 
   const fetchTasks = useCallback(async () => {
     try {
@@ -126,5 +152,10 @@ export function useTasks() {
     onlyIncomplete,
     setOnlyIncomplete,
     titleRef,
+    selectedTaskId,
+    setSelectedTaskId,
+    loadingDetails,
+    detailsError,
+    taskDetails,
   };
 }

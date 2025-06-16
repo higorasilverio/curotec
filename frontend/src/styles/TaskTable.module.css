@@ -113,6 +113,37 @@ button {
   border: 0;
 }
 
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modalContent h2 {
+  margin-top: 0;
+}
+
+.modalContent button {
+  margin-top: 1rem;
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .container h1 {
     font-size: 2rem;
@@ -142,5 +173,13 @@ button {
   .table td {
     font-size: 0.9rem;
     padding: 0.4rem;
+  }
+
+  .modalContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
   }
 }

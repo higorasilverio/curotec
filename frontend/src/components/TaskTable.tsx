@@ -22,6 +22,11 @@ export function TaskTable() {
     onlyIncomplete,
     setOnlyIncomplete,
     titleRef,
+    selectedTaskId,
+    setSelectedTaskId,
+    loadingDetails,
+    detailsError,
+    taskDetails,
   } = useTasks();
 
   return (
@@ -114,6 +119,7 @@ export function TaskTable() {
                     key={task.id}
                     task={task}
                     onToggle={(id, completed) => updateTask(id, { completed })}
+                    onSelect={() => setSelectedTaskId(task.id)}
                     onDelete={deleteTask}
                     disabled={fetching}
                   />
@@ -147,6 +153,33 @@ export function TaskTable() {
               </button>
             </div>
           )}
+        </div>
+      )}
+      {selectedTaskId !== null && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setSelectedTaskId(null)}
+        >
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {loadingDetails ? (
+              <p>Loading...</p>
+            ) : detailsError ? (
+              <p className={styles.error}>{detailsError}</p>
+            ) : taskDetails ? (
+              <>
+                <h2>{taskDetails.title}</h2>
+                <p>{taskDetails.description || "No description"}</p>
+                <p>
+                  <strong>Completed:</strong>{" "}
+                  {taskDetails.completed ? "Yes" : "No"}
+                </p>
+                <button onClick={() => setSelectedTaskId(null)}>Close</button>
+              </>
+            ) : null}
+          </div>
         </div>
       )}
     </div>

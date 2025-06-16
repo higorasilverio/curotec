@@ -6,10 +6,17 @@ interface TaskRowProps {
   task: Task;
   onToggle: (id: number, completed: boolean) => void;
   onDelete: (id: number) => void;
+  onSelect: () => void;
   disabled: boolean;
 }
 
-function TaskRowComponent({ task, onToggle, onDelete, disabled }: TaskRowProps) {
+function TaskRowComponent({
+  task,
+  onToggle,
+  onDelete,
+  onSelect,
+  disabled,
+}: TaskRowProps) {
   return (
     <tr>
       <td className={styles.dataCentered}>{task.title}</td>
@@ -23,6 +30,9 @@ function TaskRowComponent({ task, onToggle, onDelete, disabled }: TaskRowProps) 
         />
       </td>
       <td className={styles.dataCentered}>
+        <button onClick={onSelect} disabled={disabled}>
+          Details
+        </button>
         <button onClick={() => onDelete(task.id)} disabled={disabled}>
           Delete
         </button>
