@@ -10,7 +10,7 @@
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
-  align-items: flex-end
+  align-items: flex-end;
 }
 
 .formGroup {
@@ -60,7 +60,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  align-items: flex-end
+  align-items: flex-end;
 }
 
 .tableContainer input {
@@ -178,6 +178,10 @@ button {
   .table td {
     font-size: 0.9rem;
     padding: 0.4rem;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .modalContent {
